@@ -108,16 +108,17 @@
             // 
             // btnExit
             // 
+            this.btnExit.BackColor = System.Drawing.Color.Cornsilk;
             this.btnExit.FlatAppearance.BorderSize = 0;
             this.btnExit.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnExit.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.btnExit.ForeColor = System.Drawing.Color.Red;
-            this.btnExit.Location = new System.Drawing.Point(605, 3);
+            this.btnExit.Location = new System.Drawing.Point(576, 3);
             this.btnExit.Name = "btnExit";
-            this.btnExit.Size = new System.Drawing.Size(36, 36);
+            this.btnExit.Size = new System.Drawing.Size(68, 40);
             this.btnExit.TabIndex = 13;
             this.btnExit.Text = "X";
-            this.btnExit.UseVisualStyleBackColor = true;
+            this.btnExit.UseVisualStyleBackColor = false;
             this.btnExit.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // linkLabel1
@@ -127,7 +128,7 @@
             this.linkLabel1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.linkLabel1.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.linkLabel1.LinkColor = System.Drawing.Color.MidnightBlue;
-            this.linkLabel1.Location = new System.Drawing.Point(371, 601);
+            this.linkLabel1.Location = new System.Drawing.Point(338, 601);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(123, 25);
             this.linkLabel1.TabIndex = 12;
@@ -139,7 +140,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.label6.Location = new System.Drawing.Point(150, 601);
+            this.label6.Location = new System.Drawing.Point(158, 601);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(174, 25);
             this.label6.TabIndex = 11;
@@ -172,6 +173,7 @@
             // txtConfirmPass
             // 
             this.txtConfirmPass.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtConfirmPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.txtConfirmPass.Location = new System.Drawing.Point(154, 369);
             this.txtConfirmPass.Multiline = true;
             this.txtConfirmPass.Name = "txtConfirmPass";
@@ -199,6 +201,7 @@
             // txtPass
             // 
             this.txtPass.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtPass.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.txtPass.Location = new System.Drawing.Point(154, 275);
             this.txtPass.Multiline = true;
             this.txtPass.Name = "txtPass";
@@ -256,11 +259,12 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = global::QuanLyToaNha.Properties.Resources.pexels_longphoto_16551416;
-            this.pictureBox2.Location = new System.Drawing.Point(0, -43);
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.pictureBox2.Image = global::QuanLyToaNha.Properties.Resources.pexels_hu_nh_an_3895313_69998491;
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(357, 481);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox2.Size = new System.Drawing.Size(301, 466);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 2;
             this.pictureBox2.TabStop = false;
             // 

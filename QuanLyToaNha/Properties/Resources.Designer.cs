@@ -83,9 +83,29 @@ namespace QuanLyToaNha.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap landmark_81_12 {
+            get {
+                object obj = ResourceManager.GetObject("landmark-81-12", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap pexels_hu_nh_an_3895313_6999849 {
             get {
                 object obj = ResourceManager.GetObject("pexels-hu-nh-an-3895313-6999849", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pexels_hu_nh_an_3895313_69998491 {
+            get {
+                object obj = ResourceManager.GetObject("pexels-hu-nh-an-3895313-69998491", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -106,6 +126,16 @@ namespace QuanLyToaNha.Properties {
         internal static System.Drawing.Bitmap pexels_longphoto_16551416 {
             get {
                 object obj = ResourceManager.GetObject("pexels-longphoto-16551416", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap pexels_longphoto_165514161 {
+            get {
+                object obj = ResourceManager.GetObject("pexels-longphoto-165514161", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

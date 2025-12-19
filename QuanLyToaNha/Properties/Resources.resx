@@ -118,22 +118,31 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="landmark-81-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\landmark-81-1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="landmark-81-11" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\landmark-81-11.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="pexels-hu-nh-an-3895313-6999849" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pexels-hu-nh-an-3895313-6999849.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Thiet-ke-toa-nha-van-phong-building-office-thuong-mai-achi-65322-01" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Thiet-ke-toa-nha-van-phong-building-office-thuong-mai-achi-65322-01.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pexels-longphoto-165514161" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pexels-longphoto-165514161.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pexels-longphoto-16551416" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pexels-longphoto-16551416.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pexels-kieutien0105-15853578" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pexels-kieutien0105-15853578.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="pexels-longphoto-16551416" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\pexels-longphoto-16551416.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="pexels-hu-nh-an-3895313-6999849" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pexels-hu-nh-an-3895313-6999849.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="landmark-81-11" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\landmark-81-11.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="landmark-81-12" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\landmark-81-12.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="landmark-81-1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\landmark-81-1.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pexels-hu-nh-an-3895313-69998491" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pexels-hu-nh-an-3895313-69998491.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

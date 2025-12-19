@@ -115,7 +115,7 @@
             this.lnkRegister.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.lnkRegister.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkRegister.LinkColor = System.Drawing.Color.MidnightBlue;
-            this.lnkRegister.Location = new System.Drawing.Point(300, 542);
+            this.lnkRegister.Location = new System.Drawing.Point(266, 542);
             this.lnkRegister.Name = "lnkRegister";
             this.lnkRegister.Size = new System.Drawing.Size(129, 25);
             this.lnkRegister.TabIndex = 12;
@@ -126,7 +126,7 @@
             // label4
             // 
             this.label4.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.label4.Location = new System.Drawing.Point(93, 542);
+            this.label4.Location = new System.Drawing.Point(130, 542);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(354, 48);
             this.label4.TabIndex = 11;
@@ -266,7 +266,7 @@
             this.pictureBox1.Location = new System.Drawing.Point(-108, -8);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(502, 481);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
