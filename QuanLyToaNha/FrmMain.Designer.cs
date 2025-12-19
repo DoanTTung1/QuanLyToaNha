@@ -101,6 +101,7 @@
             this.btnSystem.Text = "Cấu Hình Hệ Thống";
             this.btnSystem.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.btnSystem.UseVisualStyleBackColor = true;
+            this.btnSystem.Click += new System.EventHandler(this.btnSystem_Click);
             // 
             // btnStaff
             // 

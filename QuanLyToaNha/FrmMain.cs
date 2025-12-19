@@ -64,9 +64,6 @@ namespace QuanLyToaNha
                 leftBorderBtn.Location = new Point(0, currentBtn.Location.Y);
                 leftBorderBtn.Visible = true;
                 leftBorderBtn.BringToFront();
-
-                // Đổi icon tiêu đề (nếu có)
-                // iconCurrentChildForm.IconChar = currentBtn.IconChar; 
             }
         }
 
@@ -85,13 +82,14 @@ namespace QuanLyToaNha
         // --- 2. LOGIC MỞ FORM CON (SPA) ---
         private void OpenChildForm(Form childForm)
         {
+            // Đóng form cũ đang mở (nếu có)
             if (currentChildForm != null)
             {
-                currentChildForm.Close(); // Đóng form cũ
+                currentChildForm.Close();
             }
             currentChildForm = childForm;
 
-            // Cấu hình để nhúng vào Panel
+            // Cấu hình để nhúng form con vào Panel Desktop
             childForm.TopLevel = false;
             childForm.FormBorderStyle = FormBorderStyle.None;
             childForm.Dock = DockStyle.Fill;
@@ -100,48 +98,63 @@ namespace QuanLyToaNha
             panelDesktop.Tag = childForm;
             childForm.BringToFront();
             childForm.Show();
-
-            lblTitle.Text = childForm.Text.ToUpper(); // Cập nhật tiêu đề
         }
 
-        // --- 3. SỰ KIỆN CLICK MENU ---
+        // --- 3. SỰ KIỆN CLICK MENU (ĐÃ NỐI DÂY ĐẦY ĐỦ) ---
 
+        // Nút Tổng Quan -> Mở FrmDashboard
         private void btnDashboard_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color1);
-            OpenChildForm(new FrmDashboard()); // <--- MỞ FORM DASHBOARD
+            OpenChildForm(new FrmDashboard());
             lblTitle.Text = "TỔNG QUAN HỆ THỐNG";
         }
 
+        // Nút Tòa Nhà -> Mở FrmBuilding
         private void btnBuilding_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color2);
-            OpenChildForm(new FrmBuilding()); // <--- MỞ FORM BUILDING
+            OpenChildForm(new FrmBuilding());
             lblTitle.Text = "QUẢN LÝ TÒA NHÀ";
         }
 
+        // Nút Mặt Bằng -> Mở FrmRoom
         private void btnRoom_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color3);
+            OpenChildForm(new FrmRoom()); // Đã thêm
             lblTitle.Text = "QUẢN LÝ MẶT BẰNG";
         }
 
+        // Nút Khách Hàng -> Mở FrmCustomer
         private void btnCustomer_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color4);
-            // OpenChildForm(new FrmCustomer());
+            OpenChildForm(new FrmCustomer()); // Đã thêm
             lblTitle.Text = "QUẢN LÝ KHÁCH HÀNG";
         }
+        // Nút Cấu Hình Hệ Thống
+        private void btnSystem_Click(object sender, EventArgs e)
+        {
+            // Chưa có biến màu color7 thì dùng tạm color1 hoặc thêm vào struct RGBColors
+            ActivateButton(sender, Color.FromArgb(172, 126, 241)); // Hoặc màu khác tùy bạn
+            OpenChildForm(new FrmSystem()); // <--- MỞ FORM SYSTEM
+            lblTitle.Text = "CẤU HÌNH HỆ THỐNG";
+        }
 
+        // Nút Hợp Đồng -> Mở FrmContract
         private void btnContract_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color5);
+            OpenChildForm(new FrmContract()); // Đã thêm
             lblTitle.Text = "HỢP ĐỒNG & GIAO DỊCH";
         }
 
+        // Nút Nhân Sự -> Mở FrmStaff
         private void btnStaff_Click(object sender, EventArgs e)
         {
             ActivateButton(sender, RGBColors.color6);
+            OpenChildForm(new FrmStaff()); // Đã thêm
             lblTitle.Text = "NHÂN SỰ & PHÂN QUYỀN";
         }
 
@@ -149,8 +162,7 @@ namespace QuanLyToaNha
 
         private void btnLogout_Click(object sender, EventArgs e)
         {
-            // Trả về màn hình Login
-            this.Close();
+            this.Close(); // Đóng Main để quay về Login
         }
 
         private void panelTitleBar_MouseDown(object sender, MouseEventArgs e)
@@ -159,7 +171,7 @@ namespace QuanLyToaNha
             SendMessage(this.Handle, 0x112, 0xf012, 0);
         }
 
-        // Code cho nút X, Phóng to, Thu nhỏ
+        // Nút Thoát, Phóng to, Thu nhỏ
         private void btnExit_Click(object sender, EventArgs e) { Application.Exit(); }
 
         private void btnMax_Click(object sender, EventArgs e)
@@ -172,9 +184,7 @@ namespace QuanLyToaNha
 
         private void btnMin_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
 
-        private void panelDesktop_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
+        // Các hàm sự kiện rác (giữ lại để tránh lỗi Design)
+        private void panelDesktop_Paint(object sender, PaintEventArgs e) { }
     }
 }

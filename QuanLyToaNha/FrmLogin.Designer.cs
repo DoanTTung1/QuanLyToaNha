@@ -112,12 +112,12 @@
             // lnkRegister
             // 
             this.lnkRegister.AutoSize = true;
-            this.lnkRegister.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.lnkRegister.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.lnkRegister.LinkBehavior = System.Windows.Forms.LinkBehavior.HoverUnderline;
             this.lnkRegister.LinkColor = System.Drawing.Color.MidnightBlue;
-            this.lnkRegister.Location = new System.Drawing.Point(266, 542);
+            this.lnkRegister.Location = new System.Drawing.Point(305, 542);
             this.lnkRegister.Name = "lnkRegister";
-            this.lnkRegister.Size = new System.Drawing.Size(129, 25);
+            this.lnkRegister.Size = new System.Drawing.Size(142, 28);
             this.lnkRegister.TabIndex = 12;
             this.lnkRegister.TabStop = true;
             this.lnkRegister.Text = "Đăng ký ngay";
@@ -125,8 +125,8 @@
             // 
             // label4
             // 
-            this.label4.Font = new System.Drawing.Font("Segoe UI", 10.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
-            this.label4.Location = new System.Drawing.Point(130, 542);
+            this.label4.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
+            this.label4.Location = new System.Drawing.Point(100, 542);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(354, 48);
             this.label4.TabIndex = 11;
@@ -154,6 +154,7 @@
             this.btnLogin.Cursor = System.Windows.Forms.Cursors.Hand;
             this.btnLogin.FlatAppearance.BorderSize = 0;
             this.btnLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogin.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.btnLogin.ForeColor = System.Drawing.Color.White;
             this.btnLogin.Location = new System.Drawing.Point(201, 426);
             this.btnLogin.Name = "btnLogin";
@@ -198,10 +199,11 @@
             // txtPass
             // 
             this.txtPass.AutoSize = true;
+            this.txtPass.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.txtPass.ForeColor = System.Drawing.Color.Black;
             this.txtPass.Location = new System.Drawing.Point(3, 4);
             this.txtPass.Name = "txtPass";
-            this.txtPass.Size = new System.Drawing.Size(86, 23);
+            this.txtPass.Size = new System.Drawing.Size(102, 28);
             this.txtPass.TabIndex = 0;
             this.txtPass.Text = "Mật khẩu";
             this.txtPass.Click += new System.EventHandler(this.txtPass_Click);
@@ -240,10 +242,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(163)));
             this.label3.ForeColor = System.Drawing.Color.Black;
             this.label3.Location = new System.Drawing.Point(3, 4);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(87, 23);
+            this.label3.Size = new System.Drawing.Size(103, 28);
             this.label3.TabIndex = 0;
             this.label3.Text = "Tài khoản";
             this.label3.Click += new System.EventHandler(this.label3_Click);

@@ -23,26 +23,31 @@ namespace QuanLyToaNha
         // --- SỰ KIỆN NÚT ĐĂNG NHẬP ---
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            // 1. Lấy thông tin (Giữ nguyên textBox1 như ý bạn)
             string username = txtUser.Text.Trim();
-            string password = textBox1.Text.Trim();
+            string password = textBox1.Text.Trim(); // Ô mật khẩu của bạn
 
-            // 2. CHECK TÀI KHOẢN ADMIN / 123
+            // TRƯỜNG HỢP 1: ADMIN ĐĂNG NHẬP
             if (username == "admin" && password == "123")
             {
-                MessageBox.Show("Đăng nhập thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                // 3. Mở Form Main
-                // Lưu ý: Đảm bảo bạn đã tạo FrmMain như bài trước
-                FrmMain frm = new FrmMain();
-
-                this.Hide();      // Ẩn form login
-                frm.ShowDialog(); // Hiện form Dashboard
-                this.Close();     // Đóng app sau khi thoát Dashboard
+              
+                FrmMain frmAdmin = new FrmMain();
+                this.Hide();
+                frmAdmin.ShowDialog();
+                this.Close();
+            }
+            // TRƯỜNG HỢP 2: CƯ DÂN ĐĂNG NHẬP (Demo)
+            else if (username == "user" && password == "123")
+            {
+                // Mở form riêng cho cư dân
+                
+                FrmPortal frmUser = new FrmPortal("Nguyễn Văn A"); // Truyền tên giả vào
+                this.Hide();
+                frmUser.ShowDialog();
+                this.Close();
             }
             else
             {
-                MessageBox.Show("Sai tài khoản! (Thử: admin / 123)", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Sai tài khoản! \n- Admin: admin/123\n- Cư dân: user/123", "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
