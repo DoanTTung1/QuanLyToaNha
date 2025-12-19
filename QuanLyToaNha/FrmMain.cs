@@ -139,6 +139,7 @@ namespace QuanLyToaNha
             // Chưa có biến màu color7 thì dùng tạm color1 hoặc thêm vào struct RGBColors
             ActivateButton(sender, Color.FromArgb(172, 126, 241)); // Hoặc màu khác tùy bạn
             OpenChildForm(new FrmSystem()); // <--- MỞ FORM SYSTEM
+            lblTitle.AutoSize = true;
             lblTitle.Text = "CẤU HÌNH HỆ THỐNG";
         }
 
