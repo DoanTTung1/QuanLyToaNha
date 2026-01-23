@@ -1,15 +1,68 @@
 ﻿using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Data;
+using MySql.Data.MySqlClient; // QUAN TRỌNG: Thư viện MySQL
 
 namespace QuanLyToaNha
 {
     public partial class FrmPortal : Form
     {
+        private DataGridView dgvBill; // Khai báo biến toàn cục để nạp dữ liệu
+
         public FrmPortal(string tenCuDan)
         {
             InitializeComponent();
             DesignPortal(tenCuDan);
+
+            // Tải dữ liệu hóa đơn/hợp đồng của cư dân này
+            LoadMyData(tenCuDan);
+        }
+
+        // --- HÀM LOAD DỮ LIỆU TỪ DB ---
+        private void LoadMyData(string name)
+        {
+            try
+            {
+                // Logic: Tìm trong bảng Hợp Đồng (contracts) xem có khách hàng nào tên giống người đang đăng nhập không
+                // Kết nối 3 bảng: contracts (Hợp đồng) -> customers (Khách) -> rooms (Phòng)
+                string sql = @"
+                    SELECT 
+                        c.id AS 'Mã HĐ',
+                        r.room_number AS 'Phòng',
+                        r.price AS 'Giá Thuê',
+                        DATE_FORMAT(c.start_date, '%d/%m/%Y') AS 'Ngày Bắt Đầu',
+                        c.status AS 'Trạng Thái'
+                    FROM contracts c
+                    JOIN customers cus ON c.customer_id = cus.id
+                    JOIN rooms r ON c.room_id = r.id
+                    WHERE cus.full_name LIKE @name";
+
+                using (MySqlConnection conn = DatabaseHelper.GetConnection())
+                {
+                    if (conn.State == ConnectionState.Closed) conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    // Dùng LIKE để tìm kiếm gần đúng tên (cho linh hoạt)
+                    cmd.Parameters.AddWithValue("@name", "%" + name + "%");
+
+                    MySqlDataAdapter dap = new MySqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    dap.Fill(dt);
+
+                    // Nếu tìm thấy dữ liệu thì đổ vào bảng, không thì thôi
+                    if (dt.Rows.Count > 0)
+                    {
+                        dgvBill.DataSource = dt;
+                        // Format lại cột giá tiền
+                        dgvBill.Columns["Giá Thuê"].DefaultCellStyle.Format = "N0";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Lỗi này thường do chưa có dữ liệu khớp tên, không cần báo lỗi quá gắt
+                // MessageBox.Show("Lỗi tải dữ liệu cá nhân: " + ex.Message);
+            }
         }
 
         private void DesignPortal(string name)
@@ -17,8 +70,6 @@ namespace QuanLyToaNha
             // 1. Cấu hình Form chính
             this.Size = new Size(1100, 700);
             this.StartPosition = FormStartPosition.CenterScreen;
-
-            // --- THAY ĐỔI Ở ĐÂY: MÀU MIDNIGHT BLUE ---
             this.BackColor = Color.MidnightBlue;
             this.Text = "CỔNG THÔNG TIN CƯ DÂN";
             this.WindowState = FormWindowState.Maximized;
@@ -27,8 +78,6 @@ namespace QuanLyToaNha
             Panel pnlTop = new Panel();
             pnlTop.Dock = DockStyle.Top;
             pnlTop.Height = 80;
-            // Header giữ màu xanh sáng hoặc chuyển sang màu tối hơn tùy bạn
-            // Ở đây mình để màu Brand cũ để tạo điểm nhấn
             pnlTop.BackColor = Color.FromArgb(24, 161, 251);
             this.Controls.Add(pnlTop);
 
@@ -45,7 +94,7 @@ namespace QuanLyToaNha
             Button btnLogout = new Button();
             btnLogout.Text = "Đăng xuất";
             btnLogout.BackColor = Color.White;
-            btnLogout.ForeColor = Color.MidnightBlue; // Chữ màu xanh đậm cho hợp tông
+            btnLogout.ForeColor = Color.MidnightBlue;
             btnLogout.Font = new Font("Segoe UI", 10, FontStyle.Bold);
             btnLogout.FlatStyle = FlatStyle.Flat;
             btnLogout.Size = new Size(120, 40);
@@ -53,7 +102,6 @@ namespace QuanLyToaNha
             btnLogout.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnLogout.Click += (s, e) => { this.Close(); };
             pnlTop.Controls.Add(btnLogout);
-
 
             // 3. LAYOUT CHIA ĐÔI
             TableLayoutPanel tableLayout = new TableLayoutPanel();
@@ -66,22 +114,18 @@ namespace QuanLyToaNha
             this.Controls.Add(tableLayout);
             tableLayout.BringToFront();
 
-
-            // --- CỘT TRÁI: THÔNG BÁO ---
+            // --- CỘT TRÁI: THÔNG BÁO (Giữ tĩnh vì DB chưa có bảng thông báo) ---
             GroupBox grpNoti = new GroupBox();
             grpNoti.Text = "📢 THÔNG BÁO TỪ BAN QUẢN LÝ";
             grpNoti.Dock = DockStyle.Fill;
             grpNoti.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-
-            // QUAN TRỌNG: Chữ tiêu đề màu TRẮNG để nổi trên nền MidnightBlue
             grpNoti.ForeColor = Color.White;
 
-            // Ô nội dung
             TextBox txtNoti = new TextBox();
             txtNoti.Multiline = true;
             txtNoti.Dock = DockStyle.Fill;
             txtNoti.ReadOnly = true;
-            txtNoti.BackColor = Color.White; // Nền trắng chữ đen cho dễ đọc
+            txtNoti.BackColor = Color.White;
             txtNoti.ForeColor = Color.Black;
             txtNoti.ScrollBars = ScrollBars.Vertical;
             txtNoti.BorderStyle = BorderStyle.None;
@@ -96,18 +140,16 @@ namespace QuanLyToaNha
             grpNoti.Controls.Add(txtNoti);
             tableLayout.Controls.Add(grpNoti, 0, 0);
 
-
-            // --- CỘT PHẢI: HÓA ĐƠN ---
+            // --- CỘT PHẢI: HÓA ĐƠN / HỢP ĐỒNG ---
             GroupBox grpBill = new GroupBox();
-            grpBill.Text = "💰 HÓA ĐƠN CỦA TÔI";
+            grpBill.Text = "💰 DỊCH VỤ & HỢP ĐỒNG CỦA TÔI";
             grpBill.Dock = DockStyle.Fill;
             grpBill.Font = new Font("Segoe UI", 12, FontStyle.Bold);
-            grpBill.ForeColor = Color.White; // Tiêu đề màu trắng
+            grpBill.ForeColor = Color.White;
 
-            // Bảng hóa đơn
-            DataGridView dgvBill = new DataGridView();
+            dgvBill = new DataGridView();
             dgvBill.Dock = DockStyle.Fill;
-            dgvBill.BackgroundColor = Color.White; // Nền bảng màu trắng
+            dgvBill.BackgroundColor = Color.White;
             dgvBill.BorderStyle = BorderStyle.None;
             dgvBill.RowHeadersVisible = false;
             dgvBill.AllowUserToAddRows = false;
@@ -115,27 +157,20 @@ namespace QuanLyToaNha
             dgvBill.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvBill.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
-            // Style Header
+            // Style
             dgvBill.EnableHeadersVisualStyles = false;
             dgvBill.ColumnHeadersHeight = 40;
-            dgvBill.ColumnHeadersDefaultCellStyle.BackColor = Color.MidnightBlue; // Header bảng trùng màu nền form
+            dgvBill.ColumnHeadersDefaultCellStyle.BackColor = Color.MidnightBlue;
             dgvBill.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
             dgvBill.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
-
-            // Style Nội dung
             dgvBill.DefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Regular);
             dgvBill.DefaultCellStyle.ForeColor = Color.Black;
-            dgvBill.DefaultCellStyle.SelectionBackColor = Color.CornflowerBlue; // Màu khi chọn dòng
+            dgvBill.DefaultCellStyle.SelectionBackColor = Color.CornflowerBlue;
             dgvBill.RowTemplate.Height = 40;
 
-            dgvBill.Columns.Add("Thang", "THÁNG");
-            dgvBill.Columns.Add("DichVu", "LOẠI DỊCH VỤ");
-            dgvBill.Columns.Add("Sotien", "SỐ TIỀN");
-            dgvBill.Columns.Add("TrangThai", "TRẠNG THÁI");
-
-            dgvBill.Rows.Add("12/2024", "Phí Quản Lý", "1.500.000đ", "Chưa thanh toán");
-            dgvBill.Rows.Add("12/2024", "Điện/Nước", "850.000đ", "Chưa thanh toán");
-            dgvBill.Rows.Add("11/2024", "Phí Quản Lý", "1.500.000đ", "✅ Đã thanh toán");
+            // Mặc định tạo cột rỗng để giữ giao diện đẹp nếu chưa load được data
+            dgvBill.Columns.Add("Info", "Thông tin");
+            dgvBill.Rows.Add("Đang tải dữ liệu từ máy chủ...");
 
             grpBill.Controls.Add(dgvBill);
             tableLayout.Controls.Add(grpBill, 1, 0);

@@ -1,22 +1,45 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using System.Data;
+using MySql.Data.MySqlClient; // Thư viện MySQL
 
 namespace QuanLyToaNha
 {
     public class DatabaseHelper
     {
-        // CHÚ Ý: Bạn sửa lại chuỗi kết nối này cho đúng máy bạn
-        // Server=.; nghĩa là máy local. Nếu không chạy, thử đổi dấu chấm thành tên máy bạn (VD: LAPTOP-XYZ\SQLEXPRESS)
-        // Database=estatebasic; là tên CSDL trong file SQL bạn gửi
-        public static string strConnect = "Server=.;Database=estatebasic;Integrated Security=True";
+        // Lấy chuỗi kết nối từ App.config
+        private static string strCon = ConfigurationManager.ConnectionStrings["AivenMySQL"].ConnectionString;
 
-        public static SqlConnection GetConnection()
+        // 1. Hàm lấy kết nối
+        public static MySqlConnection GetConnection()
         {
-            return new SqlConnection(strConnect);
+            MySqlConnection con = new MySqlConnection(strCon);
+            // Không mở ở đây để tránh lỗi Connection pool, để người dùng tự mở khi cần hoặc dùng using
+            return con;
+        }
+
+        // 2. Hàm lấy dữ liệu (SELECT) - Đã thêm hàm này
+        public static DataTable GetData(string sql)
+        {
+            using (MySqlConnection con = GetConnection())
+            {
+                con.Open();
+                MySqlDataAdapter dap = new MySqlDataAdapter(sql, con);
+                DataTable dt = new DataTable();
+                dap.Fill(dt);
+                return dt;
+            }
+        }
+
+        // 3. Hàm thực thi lệnh (INSERT, UPDATE, DELETE) - Đã thêm hàm này
+        public static void ExecuteSql(string sql)
+        {
+            using (MySqlConnection con = GetConnection())
+            {
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand(sql, con);
+                cmd.ExecuteNonQuery();
+            }
         }
     }
 }
