@@ -2,19 +2,20 @@
 using System.Data;
 using System.Drawing;
 using System.Windows.Forms;
-using MySql.Data.MySqlClient;
-using System.IO;   // Thư viện lưu file
-using System.Text; // Thư viện xử lý tiếng Việt
 
 namespace QuanLyToaNha
 {
     public partial class FrmStaff : Form
     {
-        private TextBox txtUser, txtName, txtRole, txtPhone;
+        private TextBox txtID, txtFullname, txtPhone, txtUsername, txtPassword;
+        private ComboBox cbbRole;
+        
 
         public FrmStaff()
         {
             InitializeComponent();
+            this.Controls.Clear();
+
             DesignInputPanel();
             StyleDataGridView();
             LoadData();
@@ -24,154 +25,113 @@ namespace QuanLyToaNha
         {
             try
             {
-                // Chỉ lấy Admin và Staff (Bỏ qua Resident)
-                string sql = "SELECT id, username, full_name, role, phone FROM users WHERE role != 'resident'";
+                // Lấy danh sách Admin và Staff (loại trừ Resident)
+                string sql = "SELECT id, full_name, phone, username, password, role FROM users WHERE role IN ('admin', 'staff')";
                 DataTable dt = DatabaseHelper.GetData(sql);
                 dgvStaff.DataSource = dt;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Lỗi tải dữ liệu: " + ex.Message);
-            }
+            catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
         }
 
         private void DesignInputPanel()
         {
-            Panel pnlInput = new Panel { Dock = DockStyle.Top, Height = 240, BackColor = Color.WhiteSmoke };
+            Panel pnlInput = new Panel { Dock = DockStyle.Top, Height = 220, BackColor = Color.WhiteSmoke };
             this.Controls.Add(pnlInput);
 
-            CreateInput(pnlInput, "Tài Khoản (Username):", out txtUser, 40, 30, 250);
-            CreateInput(pnlInput, "Họ Tên Nhân Viên:", out txtName, 320, 30, 300);
+            // --- CỘT 1 ---
+            CreateInput(pnlInput, "Mã NV (Auto):", out txtID, 40, 20, 100);
+            txtID.Enabled = false;
 
-            CreateInput(pnlInput, "Chức Vụ (admin/staff):", out txtRole, 40, 100, 250);
-            CreateInput(pnlInput, "Số Điện Thoại:", out txtPhone, 320, 100, 300);
+            CreateInput(pnlInput, "Họ và Tên:", out txtFullname, 180, 20, 250);
+            CreateInput(pnlInput, "Số Điện Thoại:", out txtPhone, 460, 20, 200);
 
-            int btnY = 170;
+            // --- CỘT 2 ---
+            CreateInput(pnlInput, "Tên Đăng Nhập:", out txtUsername, 40, 90, 200);
+            CreateInput(pnlInput, "Mật Khẩu:", out txtPassword, 280, 90, 200);
 
-            // --- NÚT THÊM ---
-            Button btnAdd = CreateButton("THÊM NHÂN SỰ", Color.FromArgb(24, 161, 251), 40, btnY);
-            btnAdd.Click += (s, e) => {
-                if (string.IsNullOrWhiteSpace(txtUser.Text)) return;
-                try
-                {
-                    string role = string.IsNullOrWhiteSpace(txtRole.Text) ? "staff" : txtRole.Text;
-                    string sql = $"INSERT INTO users (username, password, full_name, role, phone) " +
-                                 $"VALUES ('{txtUser.Text}', '123456', '{txtName.Text}', '{role}', '{txtPhone.Text}')";
+            pnlInput.Controls.Add(new Label { Text = "Vai Trò:", Location = new Point(520, 90), AutoSize = true, ForeColor = Color.DimGray });
+            cbbRole = new ComboBox { Location = new Point(520, 115), Width = 140, DropDownStyle = ComboBoxStyle.DropDownList, Font = new Font("Segoe UI", 11) };
+            cbbRole.Items.AddRange(new string[] { "admin", "staff" });
+            cbbRole.SelectedIndex = 1; // Mặc định là Staff
+            pnlInput.Controls.Add(cbbRole);
 
-                    DatabaseHelper.ExecuteSql(sql);
-                    MessageBox.Show("Thêm nhân viên thành công!\nMật khẩu mặc định: 123456");
-                    LoadData();
-                    ClearInput();
-                }
-                catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
-            };
+            // --- BUTTONS ---
+            int btnY = 160;
+            Button btnAdd = CreateButton("THÊM NHÂN VIÊN", Color.FromArgb(24, 161, 251), 40, btnY);
+            btnAdd.Click += BtnAdd_Click;
             pnlInput.Controls.Add(btnAdd);
 
-            // --- NÚT SỬA ---
-            Button btnEdit = CreateButton("SỬA THÔNG TIN", Color.FromArgb(255, 193, 7), 200, btnY);
-            btnEdit.Click += (s, e) => {
-                if (string.IsNullOrEmpty(txtUser.Text)) return;
-                try
-                {
-                    string sql = $"UPDATE users SET full_name='{txtName.Text}', role='{txtRole.Text}', phone='{txtPhone.Text}' " +
-                                 $"WHERE username='{txtUser.Text}'";
-                    DatabaseHelper.ExecuteSql(sql);
-                    MessageBox.Show("Cập nhật xong!");
-                    LoadData();
-                    ClearInput();
-                }
-                catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
-            };
+            Button btnEdit = CreateButton("CẬP NHẬT", Color.FromArgb(255, 193, 7), 200, btnY);
+            btnEdit.Click += BtnEdit_Click;
             pnlInput.Controls.Add(btnEdit);
 
-            // --- NÚT XÓA ---
-            Button btnDelete = CreateButton("XÓA NHÂN SỰ", Color.FromArgb(253, 138, 114), 360, btnY);
-            btnDelete.Click += (s, e) => {
-                if (string.IsNullOrEmpty(txtUser.Text)) return;
-                if (MessageBox.Show("Bạn muốn xóa nhân viên này vĩnh viễn?", "Cảnh báo", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
-                {
-                    try
-                    {
-                        string sql = $"DELETE FROM users WHERE username='{txtUser.Text}'";
-                        DatabaseHelper.ExecuteSql(sql);
-                        MessageBox.Show("Đã xóa!");
-                        LoadData();
-                        ClearInput();
-                    }
-                    catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
-                }
-            };
+            Button btnDelete = CreateButton("XÓA", Color.IndianRed, 360, btnY);
+            btnDelete.Click += BtnDelete_Click;
             pnlInput.Controls.Add(btnDelete);
 
-            // --- NÚT LÀM MỚI ---
-            Button btnClear = CreateButton("LÀM MỚI", Color.Gray, 520, btnY);
-            btnClear.Click += (s, e) => ClearInput();
-            pnlInput.Controls.Add(btnClear);
-
-            // --- NÚT XUẤT EXCEL (MỚI) ---
-            Button btnExcel = CreateButton("XUẤT EXCEL", Color.FromArgb(39, 174, 96), 680, btnY);
-            btnExcel.Click += (s, e) => ExportToCSV();
-            pnlInput.Controls.Add(btnExcel);
+            Button btnRefresh = CreateButton("LÀM MỚI", Color.Gray, 520, btnY);
+            btnRefresh.Click += (s, e) => { ClearInput(); LoadData(); };
+            pnlInput.Controls.Add(btnRefresh);
         }
 
-        // --- HÀM XUẤT CSV ---
-        private void ExportToCSV()
+        // --- CRUD ---
+        private void BtnAdd_Click(object sender, EventArgs e)
         {
-            if (dgvStaff.Rows.Count == 0)
+            if (string.IsNullOrWhiteSpace(txtUsername.Text)) return;
+            try
             {
-                MessageBox.Show("Không có dữ liệu để xuất!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                // Kiểm tra trùng username
+                if (DatabaseHelper.GetData($"SELECT * FROM users WHERE username='{txtUsername.Text}'").Rows.Count > 0)
+                {
+                    MessageBox.Show("Tên đăng nhập đã tồn tại!"); return;
+                }
+
+                string role = cbbRole.SelectedItem.ToString();
+                string sql = $"INSERT INTO users (full_name, phone, username, password, role) " +
+                             $"VALUES ('{txtFullname.Text}', '{txtPhone.Text}', '{txtUsername.Text}', '{txtPassword.Text}', '{role}')";
+
+                DatabaseHelper.ExecuteSql(sql);
+                MessageBox.Show("Thêm nhân viên thành công!");
+                LoadData(); ClearInput();
             }
+            catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
+        }
 
-            SaveFileDialog sfd = new SaveFileDialog();
-            sfd.Filter = "Excel CSV (*.csv)|*.csv";
-            sfd.FileName = "DanhSachNhanSu.csv";
-
-            if (sfd.ShowDialog() == DialogResult.OK)
+        private void BtnEdit_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtID.Text)) return;
+            try
             {
-                try
-                {
-                    using (StreamWriter sw = new StreamWriter(sfd.FileName, false, Encoding.UTF8))
-                    {
-                        // 1. Ghi tiêu đề
-                        string[] header = new string[dgvStaff.Columns.Count];
-                        for (int i = 0; i < dgvStaff.Columns.Count; i++)
-                        {
-                            header[i] = dgvStaff.Columns[i].HeaderText;
-                        }
-                        sw.WriteLine(string.Join(",", header));
+                string role = cbbRole.SelectedItem.ToString();
+                string sql = $"UPDATE users SET full_name='{txtFullname.Text}', phone='{txtPhone.Text}', " +
+                             $"username='{txtUsername.Text}', password='{txtPassword.Text}', role='{role}' WHERE id={txtID.Text}";
 
-                        // 2. Ghi dữ liệu
-                        foreach (DataGridViewRow row in dgvStaff.Rows)
-                        {
-                            if (!row.IsNewRow)
-                            {
-                                string[] cells = new string[dgvStaff.Columns.Count];
-                                for (int i = 0; i < dgvStaff.Columns.Count; i++)
-                                {
-                                    string value = row.Cells[i].Value?.ToString() ?? "";
-                                    cells[i] = value.Contains(",") ? $"\"{value}\"" : value;
-                                }
-                                sw.WriteLine(string.Join(",", cells));
-                            }
-                        }
-                    }
-                    MessageBox.Show("Xuất file thành công!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    System.Diagnostics.Process.Start(sfd.FileName);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Lỗi xuất file: " + ex.Message, "Lỗi", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
+                DatabaseHelper.ExecuteSql(sql);
+                MessageBox.Show("Đã cập nhật thông tin!");
+                LoadData(); ClearInput();
+            }
+            catch (Exception ex) { MessageBox.Show("Lỗi: " + ex.Message); }
+        }
+
+        private void BtnDelete_Click(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(txtID.Text)) return;
+            // Không cho phép xóa chính mình (nếu làm kỹ hơn sẽ check session)
+            // Ở đây tạm thời cảnh báo
+            if (MessageBox.Show("Bạn chắc chắn muốn xóa nhân viên này?", "Cảnh báo", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                DatabaseHelper.ExecuteSql($"DELETE FROM users WHERE id={txtID.Text}");
+                LoadData(); ClearInput();
             }
         }
 
-        private void ClearInput() { txtUser.Text = ""; txtName.Clear(); txtRole.Clear(); txtPhone.Clear(); txtUser.Focus(); }
+        // --- HELPERS ---
+        private void ClearInput() { txtID.Clear(); txtFullname.Clear(); txtPhone.Clear(); txtUsername.Clear(); txtPassword.Clear(); cbbRole.SelectedIndex = 1; }
 
         private void CreateInput(Panel p, string l, out TextBox t, int x, int y, int w)
         {
-            p.Controls.Add(new Label { Text = l, Location = new Point(x, y), AutoSize = true, Font = new Font("Segoe UI", 10), ForeColor = Color.DimGray });
-            t = new TextBox { Location = new Point(x, y + 28), Size = new Size(w, 35), Font = new Font("Segoe UI", 11) };
+            p.Controls.Add(new Label { Text = l, Location = new Point(x, y), AutoSize = true, ForeColor = Color.DimGray });
+            t = new TextBox { Location = new Point(x, y + 25), Size = new Size(w, 30), Font = new Font("Segoe UI", 11) };
             p.Controls.Add(t);
         }
 
@@ -182,30 +142,35 @@ namespace QuanLyToaNha
 
         private void StyleDataGridView()
         {
-            if (dgvStaff == null) return;
+            dgvStaff = new DataGridView();
+            dgvStaff.Dock = DockStyle.Fill;
+            this.Controls.Add(dgvStaff);
+            dgvStaff.BringToFront();
 
             dgvStaff.BorderStyle = BorderStyle.None;
             dgvStaff.BackgroundColor = Color.White;
-            dgvStaff.RowTemplate.Height = 55;
-            dgvStaff.ColumnHeadersHeight = 60;
+            dgvStaff.RowTemplate.Height = 40;
+            dgvStaff.ColumnHeadersHeight = 50;
             dgvStaff.EnableHeadersVisualStyles = false;
             dgvStaff.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(24, 30, 54);
             dgvStaff.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvStaff.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 12, FontStyle.Bold);
+            dgvStaff.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 11, FontStyle.Bold);
             dgvStaff.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvStaff.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvStaff.RowHeadersVisible = false;
             dgvStaff.ReadOnly = true;
             dgvStaff.AllowUserToAddRows = false;
+            dgvStaff.RowHeadersVisible = false;
 
             dgvStaff.CellClick += (s, e) => {
                 if (e.RowIndex >= 0)
                 {
                     var r = dgvStaff.Rows[e.RowIndex];
-                    txtUser.Text = r.Cells["username"].Value.ToString();
-                    txtName.Text = r.Cells["full_name"].Value.ToString();
-                    txtRole.Text = r.Cells["role"].Value.ToString();
+                    txtID.Text = r.Cells["id"].Value.ToString();
+                    txtFullname.Text = r.Cells["full_name"].Value.ToString();
                     txtPhone.Text = r.Cells["phone"].Value.ToString();
+                    txtUsername.Text = r.Cells["username"].Value.ToString();
+                    txtPassword.Text = r.Cells["password"].Value.ToString();
+                    cbbRole.Text = r.Cells["role"].Value.ToString();
                 }
             };
         }
